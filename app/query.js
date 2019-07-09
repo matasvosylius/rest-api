@@ -59,6 +59,7 @@ var queryChaincode = async function(peer, channelName, chaincodeName, args, fcn,
 		}
 	}
 };
+
 var getBlockByNumber = async function(peer, channelName, blockNumber, username, org_name) {
 	try {
 		// first setup the client for this org
@@ -71,26 +72,36 @@ var getBlockByNumber = async function(peer, channelName, blockNumber, username, 
 			throw new Error(message);
 		}
 
-		let response_payload = await channel.queryBlock(parseInt(blockNumber, peer));
-		if (response_payload) {
-			logger.debug(response_payload.toString('utf8'));
-			return response_payload;
-		} else {
-			logger.error('response_payload is null');
-			return 'response_payload is null';
-		}
+//		let response_payload = await channel.queryBlock(parseInt(blockNumber, peer));
+
+		return channel.queryBlock(parseInt(blockNumber, peer));
+/*			.then((block) => {
+				logger.debug('Block Number: ' + block.header.number);
+				logger.debug('Previous Hash: ' + block.header.previous_hash);
+				logger.debug('Data Hash: ' + block.header.data_hash);
+				logger.debug('Transactions: ' + block.data.data.length);
+				block.data.data.forEach(transaction => {
+					logger.debug('Transaction ID: ' + transaction.payload.header.channel_header.tx_id);
+					logger.debug('Creator ID: ' + transaction.payload.header.signature_header.creator.Mspid);
+					logger.debug('Data: ');
+					logger.debug(JSON.stringify(transaction.payload.data));
+				});
+			});
+*/
 	} catch(error) {
 		logger.error('Failed to query due to error: ' + error.stack ? error.stack : error);
 		return error.toString();
 	}
 };
-var getTransactionByID = async function(peer, channelName, trxnID, username, org_name) {
+
+
+var getTransactionByID = async function (peer, channelName, trxnID, username, org_name) {
 	try {
 		// first setup the client for this org
 		var client = await helper.getClientForOrg(org_name, username);
 		logger.debug('Successfully got the fabric client for the organization "%s"', org_name);
 		var channel = client.getChannel(channelName);
-		if(!channel) {
+		if (!channel) {
 			let message = util.format('Channel %s was not defined in the connection profile', channelName);
 			logger.error(message);
 			throw new Error(message);
@@ -104,11 +115,12 @@ var getTransactionByID = async function(peer, channelName, trxnID, username, org
 			logger.error('response_payload is null');
 			return 'response_payload is null';
 		}
-	} catch(error) {
+	} catch (error) {
 		logger.error('Failed to query due to error: ' + error.stack ? error.stack : error);
 		return error.toString();
 	}
-};
+};	
+
 var getBlockByHash = async function(peer, channelName, hash, username, org_name) {
 	try {
 		// first setup the client for this org

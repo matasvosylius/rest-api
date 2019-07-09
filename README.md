@@ -1,6 +1,6 @@
-## Balance transfer
+## REST server for Hyperledger Fabric 
 
-A sample Node.js app to demonstrate **__fabric-client__** & **__fabric-ca-client__** Node.js SDK APIs
+Simple REST for Hyperledger Fabric (using Node-SDK) and implemented chaincode 
 
 ### Prerequisites and setup:
 
@@ -10,9 +10,6 @@ A sample Node.js app to demonstrate **__fabric-client__** & **__fabric-ca-client
 * **Node.js** v8.4.0 or higher
 * [Download Docker images](http://hyperledger-fabric.readthedocs.io/en/latest/samples.html#binaries)
 
-```
-cd fabric-samples/balance-transfer/
-```
 
 Once you have completed the above setup, you will have provisioned a local network with the following docker container configuration:
 
@@ -64,7 +61,7 @@ PORT=4000 node app
 ```
 cd fabric-samples/balance-transfer
 
-./runApp.sh
+./startREST.sh
 
 ```
 
@@ -85,11 +82,11 @@ cd fabric-samples/balance-transfer
 
 ## To use golang chaincode execute the following command
 
-./testAPIs.sh -l golang
+./test.sh
 
 ## OR use node.js chaincode
 
-./testAPIs.sh -l node
+./test.sh -l node
 ```
 
 
@@ -106,8 +103,8 @@ cd fabric-samples/balance-transfer
 ```
 {
   "success": true,
-  "secret": "RaxhMgevgJcm",
-  "message": "Jim enrolled Successfully",
+  "secret": "RaxhMgedddasdsffqwvgJcm",
+  "message": "USER enrolled Successfully",
   "token": "<put JSON Web Token here>"
 }
 ```
@@ -300,9 +297,7 @@ curl -s -X GET \
 The network will still be running at this point. Before starting the network manually again, here are the commands which cleans the containers and artifacts.
 
 ```
-docker rm -f $(docker ps -aq)
-docker rmi -f $(docker images | grep dev | awk '{print $3}')
-rm -rf fabric-client-kv-org[1-2]
+./clean.sh
 ```
 
 ### Network configuration considerations
